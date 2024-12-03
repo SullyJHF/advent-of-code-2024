@@ -32,10 +32,18 @@ func main() {
 		lhs = append(lhs, first)
 		rhs = append(rhs, second)
 	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	part1(append([]int(nil), lhs...), append([]int(nil), rhs...))
+	part2(append([]int(nil), lhs...), append([]int(nil), rhs...))
+}
+
+func part1(lhs, rhs []int) {
 	slices.Sort(lhs)
 	slices.Sort(rhs)
-	fmt.Println(lhs)
-	fmt.Println(rhs)
 	total := 0
 	for i := 0; i < len(lhs); i++ {
 		left := lhs[i]
@@ -46,8 +54,18 @@ func main() {
 		}
 		total += diff
 	}
-	fmt.Println(total)
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+	fmt.Printf("Part 1: %d\n", total)
+}
+
+func part2(lhs, rhs []int) {
+	numCounts := make(map[int]int)
+	for _, num := range rhs {
+		numCounts[num] += 1
 	}
+	similarityScore := 0
+	for _, num := range lhs {
+		count := numCounts[num]
+		similarityScore += num * count
+	}
+	fmt.Printf("Part 2: %d\n", similarityScore)
 }
