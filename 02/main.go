@@ -36,6 +36,7 @@ func main() {
 	}
 
 	part1(&reports)
+	part2(&reports)
 }
 
 func isSafe(report *[]int) bool {
@@ -72,6 +73,19 @@ func isSafe(report *[]int) bool {
 	return safe
 }
 
+func newIsSafe(report *[]int) bool {
+	for i := 0; i < len(*report); i++ {
+		newReport := make([]int, 0)
+		newReport = append(newReport, (*report)[:i]...)
+		newReport = append(newReport, (*report)[i+1:]...)
+		safe := isSafe(&newReport)
+		if safe {
+			return true
+		}
+	}
+	return false
+}
+
 func part1(reports *[][]int) {
 	totalSafe := 0
 	for _, report := range *reports {
@@ -84,4 +98,13 @@ func part1(reports *[][]int) {
 }
 
 func part2(reports *[][]int) {
+	totalSafe := 0
+	for _, report := range *reports {
+		if isSafe(&report) {
+			totalSafe++
+		} else if newIsSafe(&report) {
+			totalSafe++
+		}
+	}
+	fmt.Printf("Part 1: %d\n", totalSafe)
 }
